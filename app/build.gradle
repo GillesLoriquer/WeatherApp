@@ -13,7 +13,7 @@ android {
     buildToolsVersion "29.0.1"
     defaultConfig {
         applicationId "com.example.weatherapp"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -48,6 +48,9 @@ dependencies {
     // Room
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
     kapt "androidx.room:room-compiler:$room_version"                                // Annotation processor (kapt)
 
     // Lifecycle

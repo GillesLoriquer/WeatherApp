@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="today">Aujourd\'hui</string>
+    <string name="seven_days">7 jours</string>
+    <string name="settings">Réglages</string>
 </resources>
