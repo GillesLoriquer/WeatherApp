@@ -79,6 +79,7 @@ dependencies {
 
     // moshi (JSON parser)
     implementation("com.squareup.moshi:moshi:$moshi_version")
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
 
     // Preference
     // (This library manages the user interface and interacts with storage so that you define only the
