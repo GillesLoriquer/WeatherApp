@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.weatherapp.R
-import com.example.weatherapp.data.network.ApixuApi
+import com.example.weatherapp.data.network.ApixuApiService
+import com.example.weatherapp.data.network.ConnectivityInterceptorImpl
+import com.example.weatherapp.data.network.WeatherNetworkDataSourceImpl
 import kotlinx.android.synthetic.main.current_weather_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -32,11 +35,15 @@ class CurrentWeatherFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(CurrentWeatherViewModel::class.java)
 
-        val apiService = ApixuApi.retrofitService
+        val apiService = ApixuApiService(ConnectivityInterceptorImpl(this.context!!))
+        val weatherNetworkDataSource = WeatherNetworkDataSourceImpl(apiService)
+
+        weatherNetworkDataSource.downloadedCurrentWeather.observe(this, Observer {
+            textview.text = it.toString()
+        })
+
         GlobalScope.launch(Dispatchers.Main) {
-            val result = apiService.getCurrentWeather("Paris")
-            textview.text = result.toString()
+            weatherNetworkDataSource.fetchCurrentWeather("Nantes")
         }
     }
-
 }
