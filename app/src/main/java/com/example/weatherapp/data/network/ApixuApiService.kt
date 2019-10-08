@@ -1,6 +1,6 @@
-package com.example.weatherapp.data
+package com.example.weatherapp.data.network
 
-import com.example.weatherapp.data.response.CurrentWeatherResponse
+import com.example.weatherapp.data.network.response.CurrentWeatherResponse
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Interceptor
@@ -57,5 +57,9 @@ private val retrofit = Retrofit.Builder()
 
 // Singleton ApixuApi
 object ApixuApi {
-    val retrofitService: ApixuApiService by lazy { retrofit.create(ApixuApiService::class.java) }
+    val retrofitService: ApixuApiService by lazy {
+        retrofit.create(
+            ApixuApiService::class.java
+        )
+    }
 }

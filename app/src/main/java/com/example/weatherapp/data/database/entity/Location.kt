@@ -1,5 +1,4 @@
-package com.example.weatherapp.data.response
-
+package com.example.weatherapp.data.database.entity
 
 import com.squareup.moshi.Json
 
