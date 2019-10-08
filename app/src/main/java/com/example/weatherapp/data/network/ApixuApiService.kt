@@ -17,7 +17,7 @@ interface ApixuApiService {
     @GET("current")
     suspend fun getCurrentWeather(
         @Query("query") location: String,
-        @Query("lang") languageCode: String = "fr"
+        @Query("units") languageCode: String = "m"
     ): CurrentWeatherResponse
 }
 
