@@ -43,7 +43,7 @@ class CurrentWeatherFragment : Fragment() {
         })
 
         GlobalScope.launch(Dispatchers.Main) {
-            weatherNetworkDataSource.fetchCurrentWeather("Nantes")
+            weatherNetworkDataSource.fetchCurrentWeather("Nantes", "m")
         }
     }
 }

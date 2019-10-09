@@ -19,7 +19,7 @@ interface ApixuApiService {
     @GET("current")
     suspend fun getCurrentWeather(
         @Query("query") location: String,
-        @Query("units") languageCode: String = "m"
+        @Query("units") metric: String
     ): CurrentWeatherResponse
 
     companion object {
