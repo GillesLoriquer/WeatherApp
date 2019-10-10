@@ -5,6 +5,7 @@ import com.example.weatherapp.data.database.ForecastDatabase
 import com.example.weatherapp.data.network.*
 import com.example.weatherapp.data.repository.ForecastRepository
 import com.example.weatherapp.data.repository.ForecastRepositoryImpl
+import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
@@ -39,5 +40,11 @@ class ForecastApplication : Application(), KodeinAware {
         // créer une dépendance de ForecastRepository
         // les deux instances font références aux paramètres nécessaire à l'instanciation de ForecastRepositoryImpl
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance()) }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        // Initialisation de la librairie ThreeTenAbp
+        AndroidThreeTen.init(this)
     }
 }
