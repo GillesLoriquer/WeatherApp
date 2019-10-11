@@ -5,5 +5,5 @@ import com.example.weatherapp.data.database.entity.CurrentWeatherEntry
 
 interface ForecastRepository {
     val currentWeather: LiveData<CurrentWeatherEntry>
-    suspend fun initWeatherData()
+    suspend fun initWeatherData(location: String, metric: String)
 }

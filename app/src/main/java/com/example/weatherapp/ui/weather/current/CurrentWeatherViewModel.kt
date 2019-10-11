@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.data.database.entity.CurrentWeatherEntry
 import com.example.weatherapp.data.repository.ForecastRepository
+import com.example.weatherapp.internal.UnitSystem
 import kotlinx.coroutines.launch
 
 class CurrentWeatherViewModel(
@@ -15,7 +16,7 @@ class CurrentWeatherViewModel(
 
     init {
         viewModelScope.launch {
-            forecastRepository.initWeatherData()
+            forecastRepository.initWeatherData("Toulouse", UnitSystem.METRIC.code)
         }
     }
 }

@@ -33,13 +33,13 @@ class ForecastRepositoryImpl(
         }
     }
 
-    override suspend fun initWeatherData() {
+    override suspend fun initWeatherData(location: String, metric: String) {
         if (isFetchCurrentNeeded(ZonedDateTime.now().minusHours(1)))
-            fetchCurrentWeather()
+            fetchCurrentWeather(location, metric)
     }
 
-    private suspend fun fetchCurrentWeather() {
-        weatherNetworkDataSource.fetchCurrentWeather("Nantes")
+    private suspend fun fetchCurrentWeather(location: String, metric: String) {
+        weatherNetworkDataSource.fetchCurrentWeather(location, metric)
     }
 
     private fun isFetchCurrentNeeded(lastFetchedTime: ZonedDateTime): Boolean {
