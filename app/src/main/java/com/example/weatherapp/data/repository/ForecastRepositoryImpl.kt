@@ -8,7 +8,6 @@ import com.example.weatherapp.data.network.response.CurrentWeatherResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.threeten.bp.ZonedDateTime
 
 class ForecastRepositoryImpl(
@@ -16,19 +15,13 @@ class ForecastRepositoryImpl(
     private val weatherNetworkDataSource: WeatherNetworkDataSource
 ) : ForecastRepository {
 
+    override val currentWeather: LiveData<CurrentWeatherEntry> = currentWeatherDao.getCurrentWeather()
+
     init {
         // on utilise observeForever car un repository n'a pas de LifeCycle.
         weatherNetworkDataSource.downloadedCurrentWeather.observeForever {
             // persist
             persistFetchedCurrentWeather(it)
-        }
-    }
-
-    override suspend fun getCurrentWeather(): LiveData<CurrentWeatherEntry> {
-        initWeatherData()
-        // contrairement à launch, withContext retourne un résultat
-        return withContext(Dispatchers.IO) {
-            return@withContext currentWeatherDao.getCurrentWeather()
         }
     }
 
@@ -40,7 +33,7 @@ class ForecastRepositoryImpl(
         }
     }
 
-    private suspend fun initWeatherData() {
+    override suspend fun initWeatherData() {
         if (isFetchCurrentNeeded(ZonedDateTime.now().minusHours(1)))
             fetchCurrentWeather()
     }

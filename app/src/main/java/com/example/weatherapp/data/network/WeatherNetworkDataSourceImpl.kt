@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.weatherapp.data.network.response.CurrentWeatherResponse
 import com.example.weatherapp.internal.NoConnectivityException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class WeatherNetworkDataSourceImpl(
     private val apixuApiService: ApixuApiService
@@ -15,8 +17,10 @@ class WeatherNetworkDataSourceImpl(
 
     override suspend fun fetchCurrentWeather(location: String, metric: String) {
         try {
-            val fetchedCurrentWeather = apixuApiService.getCurrentWeather(location, metric)
-            _downloadedCurrentWeather.postValue(fetchedCurrentWeather)
+            withContext(Dispatchers.IO) {
+                val fetchedCurrentWeather = apixuApiService.getCurrentWeather(location, metric)
+                _downloadedCurrentWeather.postValue(fetchedCurrentWeather)
+            }
         } catch (e: NoConnectivityException) {
             Log.e("Connectivity", e.message)
         }

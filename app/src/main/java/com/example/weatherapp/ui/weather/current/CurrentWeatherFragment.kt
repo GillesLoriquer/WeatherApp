@@ -5,45 +5,41 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.weatherapp.R
-import com.example.weatherapp.data.network.ApixuApiService
-import com.example.weatherapp.data.network.ConnectivityInterceptorImpl
-import com.example.weatherapp.data.network.WeatherNetworkDataSourceImpl
-import kotlinx.android.synthetic.main.current_weather_fragment.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.example.weatherapp.databinding.CurrentWeatherFragmentBinding
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 
-class CurrentWeatherFragment : Fragment() {
+class CurrentWeatherFragment : Fragment(), KodeinAware {
 
-    companion object {
-        fun newInstance() = CurrentWeatherFragment()
-    }
-
-    private lateinit var viewModel: CurrentWeatherViewModel
+    // Android components can be thought as layers. For example, a View defines a layer, on top of an Activity layer,
+    // itself on top of the Application layer.
+    // The closestKodein function will always return the kodein of the closest parent layer. In a View or a Fragment,
+    // for example, it will return the containing Activity’s Kodein, if it defines one, else it will return the
+    // "global" Application Kodein.
+    override val kodein by closestKodein()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.current_weather_fragment, container, false)
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(CurrentWeatherViewModel::class.java)
+        // inflate l'objet binding à partir de sa vue (current_weather_fragment.xml)
+        val binding = CurrentWeatherFragmentBinding.inflate(inflater)
 
-        val apiService = ApixuApiService(ConnectivityInterceptorImpl(this.context!!))
-        val weatherNetworkDataSource = WeatherNetworkDataSourceImpl(apiService)
+        // set ce fragment comme étant le propriétaire du cycle de vie de l'objet binding
+        binding.lifecycleOwner = this
 
-        weatherNetworkDataSource.downloadedCurrentWeather.observe(this, Observer {
-            textview.text = it.toString()
-        })
+        // récupère l'instance de CurrentWeatherViewModelFactory via Kodein
+        val currentWeatherViewModelFactory: CurrentWeatherViewModelFactory by instance()
 
-        GlobalScope.launch(Dispatchers.Main) {
-            weatherNetworkDataSource.fetchCurrentWeather("Nantes", "m")
-        }
+        // couple CurrentWeatherViewModel à l'objet binding pour que puisse être exploité le viewModel dans
+        // current_weather_fragment.xml
+        binding.viewModel = ViewModelProviders
+            .of(this, currentWeatherViewModelFactory)
+            .get(CurrentWeatherViewModel::class.java)
+
+        return binding.root
     }
 }

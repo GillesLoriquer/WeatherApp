@@ -5,12 +5,14 @@ import com.example.weatherapp.data.database.ForecastDatabase
 import com.example.weatherapp.data.network.*
 import com.example.weatherapp.data.repository.ForecastRepository
 import com.example.weatherapp.data.repository.ForecastRepositoryImpl
+import com.example.weatherapp.ui.weather.current.CurrentWeatherViewModelFactory
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
+import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 
 class ForecastApplication : Application(), KodeinAware {
@@ -40,6 +42,10 @@ class ForecastApplication : Application(), KodeinAware {
         // créer une dépendance de ForecastRepository
         // les deux instances font références aux paramètres nécessaire à l'instanciation de ForecastRepositoryImpl
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance()) }
+
+        // créer une instance de CurrentWeatherViewModelFactory
+        // ici instance() fait référence à ForecastRepository déjà instancié
+        bind() from provider { CurrentWeatherViewModelFactory(instance()) }
     }
 
     override fun onCreate() {

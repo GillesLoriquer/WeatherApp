@@ -4,5 +4,6 @@ import androidx.lifecycle.LiveData
 import com.example.weatherapp.data.database.entity.CurrentWeatherEntry
 
 interface ForecastRepository {
-    suspend fun getCurrentWeather(): LiveData<CurrentWeatherEntry>
+    val currentWeather: LiveData<CurrentWeatherEntry>
+    suspend fun initWeatherData()
 }
