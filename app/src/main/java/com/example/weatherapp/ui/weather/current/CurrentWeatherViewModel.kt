@@ -12,11 +12,11 @@ class CurrentWeatherViewModel(
     private val forecastRepository: ForecastRepository
 ) : ViewModel() {
 
-    var currentWeather: LiveData<CurrentWeatherEntry> = forecastRepository.currentWeather
+    val currentWeather: LiveData<CurrentWeatherEntry> = forecastRepository.currentWeather
 
     init {
         viewModelScope.launch {
-            forecastRepository.initWeatherData("Toulouse", UnitSystem.METRIC.code)
+            forecastRepository.initWeatherData("La Chapelle sur Erdre", UnitSystem.METRIC.code)
         }
     }
 }

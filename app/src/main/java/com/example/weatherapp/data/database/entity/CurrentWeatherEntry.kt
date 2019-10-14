@@ -15,15 +15,13 @@ data class CurrentWeatherEntry(
     val weatherDescriptions: List<String>,
     @Json(name = "wind_speed")
     val windSpeed: Double,
-    @Json(name = "wind_degree")
-    val windDegree: Double,
     @Json(name = "wind_dir")
     val windDir: String,
     val pressure: Double,
     val precip: Double,
     val humidity: Double,
     val cloudcover: Int,
-    val feelslike: Int,
+    val feelslike: Double,
     @Json(name = "uv_index")
     val uvIndex: Int,
     val visibility: Int,

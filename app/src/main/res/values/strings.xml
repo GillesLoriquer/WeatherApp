@@ -3,4 +3,18 @@
     <string name="today">Aujourd\'hui</string>
     <string name="seven_days">7 jours</string>
     <string name="settings">Réglages</string>
+
+    <!-- Divers -->
+    <string name="chargement">Chargement...</string>
+
+    <!-- Météo -->
+    <string name="vitesse_du_vent">Vitesse du vent</string>
+    <string name="direction_du_vent">Direction du vent</string>
+    <string name="press_atmo">Press. atmo.</string>
+    <string name="precipitation">Précipitation</string>
+    <string name="humidite">Humidité</string>
+    <string name="couv_nuageuse">Couv. nuageuse</string>
+    <string name="index_uv">Index UV</string>
+    <string name="visibilite">Visibilité</string>
+    <string name="desc_icone_meteo">Icône représentant la météo</string>
 </resources>

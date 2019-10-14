@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
@@ -12,13 +15,257 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="10dp"
         tools:context=".ui.weather.current.CurrentWeatherFragment">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/vertical_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.currentWeather == null ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
-            android:id="@+id/textview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text='@{viewModel.currentWeather.toString() ?? "Current Weather"}' />
+            android:id="@+id/progress_bar_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/chargement"
+            android:visibility="@{viewModel.currentWeather == null ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintEnd_toEndOf="@id/progress_bar"
+            app:layout_constraintStart_toStartOf="@id/progress_bar"
+            app:layout_constraintTop_toBottomOf="@id/progress_bar" />
+
+        <TextView
+            android:id="@+id/weather_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.currentWeather.weatherDescriptions[0]}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Partly Cloudy" />
+
+        <TextView
+            android:id="@+id/weather_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline2"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintEnd_toStartOf="@id/vertical_guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/weather_description"
+            app:temperature="@{viewModel.currentWeather.temperature}"
+            tools:text="20.0°" />
+
+        <TextView
+            android:id="@+id/weather_temp_feels_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintEnd_toEndOf="@id/weather_temp"
+            app:layout_constraintStart_toStartOf="@id/weather_temp"
+            app:layout_constraintTop_toBottomOf="@id/weather_temp"
+            app:temperatureRessentie="@{viewModel.currentWeather.feelslike}"
+            tools:text="Feels like 20.0°" />
+
+        <ImageView
+            android:id="@+id/weather_logo"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:contentDescription="@string/desc_icone_meteo"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:imageUrl="@{viewModel.currentWeather.weatherIcons[0]}"
+            app:layout_constraintBottom_toBottomOf="@id/weather_temp_feels_like"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/vertical_guideline"
+            app:layout_constraintTop_toTopOf="@id/weather_temp"
+            tools:src="@drawable/placeholder_cloudy_with_light_rain" />
+
+        <TextView
+            android:id="@+id/wind_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:text="@string/vitesse_du_vent"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toTopOf="@id/wind_direction"
+            app:layout_constraintEnd_toStartOf="@id/vertical_guideline"
+            app:layout_constraintTop_toBottomOf="@id/weather_temp_feels_like"
+            app:layout_constraintVertical_chainStyle="spread_inside" />
+
+        <TextView
+            android:id="@+id/wind_speed_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@id/wind_speed"
+            app:layout_constraintStart_toEndOf="@id/vertical_guideline"
+            app:layout_constraintTop_toTopOf="@id/wind_speed"
+            app:vitesseVent='@{viewModel.currentWeather.windSpeed}'
+            tools:text="12 km/h" />
+
+        <TextView
+            android:id="@+id/wind_direction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/direction_du_vent"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toTopOf="@id/pressure"
+            app:layout_constraintEnd_toEndOf="@id/wind_speed"
+            app:layout_constraintTop_toBottomOf="@id/wind_speed" />
+
+        <TextView
+            android:id="@+id/wind_direction_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{viewModel.currentWeather.windDir}'
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@id/wind_direction"
+            app:layout_constraintStart_toStartOf="@id/wind_speed_val"
+            app:layout_constraintTop_toTopOf="@id/wind_direction"
+            tools:text="NE" />
+
+        <TextView
+            android:id="@+id/pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/press_atmo"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toTopOf="@id/precipitation"
+            app:layout_constraintEnd_toEndOf="@id/wind_speed"
+            app:layout_constraintTop_toBottomOf="@id/wind_direction" />
+
+        <TextView
+            android:id="@+id/pressure_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@id/pressure"
+            app:layout_constraintStart_toStartOf="@id/wind_speed_val"
+            app:layout_constraintTop_toTopOf="@id/pressure"
+            app:pressionAtmo='@{viewModel.currentWeather.pressure}'
+            tools:text="1016 hPA" />
+
+        <TextView
+            android:id="@+id/precipitation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/precipitation"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toTopOf="@id/humidity"
+            app:layout_constraintEnd_toEndOf="@id/wind_speed"
+            app:layout_constraintTop_toBottomOf="@id/pressure" />
+
+        <TextView
+            android:id="@+id/precipitation_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@id/precipitation"
+            app:layout_constraintStart_toStartOf="@id/wind_speed_val"
+            app:layout_constraintTop_toTopOf="@id/precipitation"
+            app:precipitation='@{viewModel.currentWeather.precip}'
+            tools:text="12 mm" />
+
+        <TextView
+            android:id="@+id/humidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/humidite"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toTopOf="@id/cloud_cover"
+            app:layout_constraintEnd_toEndOf="@id/wind_speed"
+            app:layout_constraintTop_toBottomOf="@id/precipitation" />
+
+        <TextView
+            android:id="@+id/humidity_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:humidite='@{viewModel.currentWeather.humidity}'
+            app:layout_constraintBottom_toBottomOf="@id/humidity"
+            app:layout_constraintStart_toStartOf="@id/wind_speed_val"
+            app:layout_constraintTop_toTopOf="@id/humidity"
+            tools:text="50%" />
+
+        <TextView
+            android:id="@+id/cloud_cover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/couv_nuageuse"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toTopOf="@id/uv_index"
+            app:layout_constraintEnd_toEndOf="@id/wind_speed"
+            app:layout_constraintTop_toBottomOf="@id/humidity" />
+
+        <TextView
+            android:id="@+id/cloud_cover_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:couvNuageuse='@{viewModel.currentWeather.cloudcover}'
+            app:layout_constraintBottom_toBottomOf="@id/cloud_cover"
+            app:layout_constraintStart_toStartOf="@id/wind_speed_val"
+            app:layout_constraintTop_toTopOf="@id/cloud_cover"
+            tools:text="50%" />
+
+        <TextView
+            android:id="@+id/uv_index"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/index_uv"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toTopOf="@id/visibility"
+            app:layout_constraintEnd_toEndOf="@id/wind_speed"
+            app:layout_constraintTop_toBottomOf="@id/cloud_cover" />
+
+        <TextView
+            android:id="@+id/uv_index_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{String.valueOf(viewModel.currentWeather.uvIndex)}'
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@id/uv_index"
+            app:layout_constraintStart_toStartOf="@id/wind_speed_val"
+            app:layout_constraintTop_toTopOf="@id/uv_index"
+            tools:text="5" />
+
+        <TextView
+            android:id="@+id/visibility"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/visibilite"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/wind_speed"
+            app:layout_constraintTop_toBottomOf="@id/uv_index" />
+
+        <TextView
+            android:id="@+id/visibility_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.currentWeather == null ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@id/visibility"
+            app:layout_constraintStart_toStartOf="@id/wind_speed_val"
+            app:layout_constraintTop_toTopOf="@id/visibility"
+            app:visibilite='@{viewModel.currentWeather.visibility}'
+            tools:text="10km" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
