@@ -1,9 +1,12 @@
-package com.example.weatherapp.data.repository
+package com.example.weatherapp.internal
 
+import android.content.Context
+import android.preference.PreferenceManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.example.weatherapp.data.provider.UNIT_SYSTEM
 import kotlin.math.roundToInt
 
 /**
@@ -19,35 +22,47 @@ fun setImageUrl(imageView: ImageView, url: String?) {
 @BindingAdapter("temperature")
 fun setTemperature(textView: TextView, temperature: Double?) {
     temperature?.let {
-        textView.text = "${it.roundToInt()} °C"
+        textView.text = when (getUnitSystem(textView.context.applicationContext)) {
+            UnitSystem.METRIC -> "${it.roundToInt()} °C"
+            else -> "${it.roundToInt()} °F"
+        }
     }
 }
 
 @BindingAdapter("temperatureRessentie")
 fun setTemperatureRessentie(textView: TextView, temperatureRessentie: Double?) {
     temperatureRessentie?.let {
-        textView.text = "Ressenti ${it.roundToInt()} °C"
+        textView.text = when (getUnitSystem(textView.context.applicationContext)) {
+            UnitSystem.METRIC -> "Ressenti ${it.roundToInt()} °C"
+            else -> "Ressenti ${it.roundToInt()} °F"
+        }
     }
 }
 
 @BindingAdapter("vitesseVent")
 fun setVitesseVent(textView: TextView, vitesseVent: Double?) {
     vitesseVent?.let {
-        textView.text = "${it.roundToInt()} km/h"
+        textView.text = when (getUnitSystem(textView.context.applicationContext)) {
+            UnitSystem.METRIC -> "${it.roundToInt()} km/h"
+            else -> "${it.roundToInt()} mi/h"
+        }
     }
 }
 
 @BindingAdapter("pressionAtmo")
 fun setPressionAtmo(textView: TextView, pressionAtmo: Double?) {
     pressionAtmo?.let {
-        textView.text = "${it.roundToInt()} hPa"
+        textView.text = "${it.roundToInt()} mb"
     }
 }
 
 @BindingAdapter("precipitation")
 fun setPrecipitation(textView: TextView, precipitation: Double?) {
     precipitation?.let {
-        textView.text = "$it mm"
+        textView.text = when (getUnitSystem(textView.context.applicationContext)) {
+            UnitSystem.METRIC -> "$it mm"
+            else -> "$it in"
+        }
     }
 }
 
@@ -68,6 +83,16 @@ fun setCouvNuageuse(textView: TextView, couvNuageuse: Int?) {
 @BindingAdapter("visibilite")
 fun setVisibilite(textView: TextView, visibilite: Int?) {
     visibilite?.let {
-        textView.text = "$it km"
+        textView.text = when (getUnitSystem(textView.context.applicationContext)) {
+            UnitSystem.METRIC -> "$it km"
+            else -> "$it mi"
+        }
     }
+}
+
+// retourne le type de UnitSystem pour afficher les bonnes unités pour chaque valeur
+fun getUnitSystem(appContext: Context): UnitSystem {
+    val preferences = PreferenceManager.getDefaultSharedPreferences(appContext)
+    val selectedUnitSystem = preferences.getString(UNIT_SYSTEM, UnitSystem.METRIC.system)
+    return UnitSystem.valueOf(selectedUnitSystem!!)
 }

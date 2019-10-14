@@ -1,7 +1,6 @@
 package com.example.weatherapp.internal
 
-enum class UnitSystem(val code: String) {
-    METRIC("m"),
-    FAHRENHEIT("f"),
-    SCIENTIFIC("s")
+enum class UnitSystem(val system: String, val code: String) {
+    METRIC("METRIC", "m"),
+    IMPERIAL("IMPERIAL", "f")
 }

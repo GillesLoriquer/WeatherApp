@@ -3,6 +3,8 @@ package com.example.weatherapp
 import android.app.Application
 import com.example.weatherapp.data.database.ForecastDatabase
 import com.example.weatherapp.data.network.*
+import com.example.weatherapp.data.provider.UnitProvider
+import com.example.weatherapp.data.provider.UnitProviderImpl
 import com.example.weatherapp.data.repository.ForecastRepository
 import com.example.weatherapp.data.repository.ForecastRepositoryImpl
 import com.example.weatherapp.ui.weather.current.CurrentWeatherViewModelFactory
@@ -43,9 +45,12 @@ class ForecastApplication : Application(), KodeinAware {
         // les deux instances font références aux paramètres nécessaire à l'instanciation de ForecastRepositoryImpl
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance()) }
 
+        // créer une instance de UnitProvider
+        bind<UnitProvider>() with singleton { UnitProviderImpl(instance()) }
+
         // créer une instance de CurrentWeatherViewModelFactory
         // ici instance() fait référence à ForecastRepository déjà instancié
-        bind() from provider { CurrentWeatherViewModelFactory(instance()) }
+        bind() from provider { CurrentWeatherViewModelFactory(instance(), instance()) }
     }
 
     override fun onCreate() {

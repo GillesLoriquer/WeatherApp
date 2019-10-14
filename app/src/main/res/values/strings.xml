@@ -17,4 +17,8 @@
     <string name="index_uv">Index UV</string>
     <string name="visibilite">Visibilité</string>
     <string name="desc_icone_meteo">Icône représentant la météo</string>
+
+    <!-- Settings -->
+    <string name="localisation">Localisation</string>
+    <string name="unites">Unités</string>
 </resources>

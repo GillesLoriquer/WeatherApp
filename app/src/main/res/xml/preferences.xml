@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/localisation">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:disableDependentsState="true"
+            android:key="USE_DEVICE_LOCATION"
+            android:summary="Autorise l'application à vous géolocaliser"
+            android:title="Utiliser la géolocalisation" />
+
+        <EditTextPreference
+            android:defaultValue="Carquefou"
+            android:dependency="USE_DEVICE_LOCATION"
+            android:key="CUSTOM_LOCATION"
+            android:summary="Affiche le bulletin météo pour la localisation sélectionnée"
+            android:title="Localisation" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/unites">
+        <ListPreference
+            android:defaultValue="METRIC"
+            android:entries="@array/unitSystemEntries"
+            android:entryValues="@array/unitSystemValues"
+            android:key="UNIT_SYSTEM"
+            android:summary="%s"
+            android:title="Système de mesure" />
+    </PreferenceCategory>
+</PreferenceScreen>
