@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.weatherapp.R
 import com.example.weatherapp.databinding.CurrentWeatherFragmentBinding
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -34,12 +37,34 @@ class CurrentWeatherFragment : Fragment(), KodeinAware {
         // récupère l'instance de CurrentWeatherViewModelFactory via Kodein
         val currentWeatherViewModelFactory: CurrentWeatherViewModelFactory by instance()
 
-        // couple CurrentWeatherViewModel à l'objet binding pour que puisse être exploité le viewModel dans
-        // current_weather_fragment.xml
-        binding.viewModel = ViewModelProviders
+        // créer une instance du view model
+        val viewModel = ViewModelProviders
             .of(this, currentWeatherViewModelFactory)
             .get(CurrentWeatherViewModel::class.java)
 
+        // couple CurrentWeatherViewModel à l'objet binding pour que puisse être exploité le viewModel dans
+        // current_weather_fragment.xml
+        binding.viewModel = viewModel
+
+        // affiche "Aujourd'hui" dans le subtitle de l'action bar
+        updateDateToToday()
+
+        // observe weatherLocation pour mettre à jour le nom de la location dans l'action bar
+        viewModel.weatherLocation.observe(this@CurrentWeatherFragment, Observer { weatherLocation ->
+            weatherLocation?.let {
+                updateLocation(it.name)
+            }
+        })
+
         return binding.root
+    }
+
+    private fun updateLocation(location: String) {
+        (activity as? AppCompatActivity)?.supportActionBar?.title = location
+    }
+
+    private fun updateDateToToday() {
+        val context = this@CurrentWeatherFragment.activity?.applicationContext
+        (activity as? AppCompatActivity)?.supportActionBar?.subtitle = context?.getString(R.string.today)
     }
 }

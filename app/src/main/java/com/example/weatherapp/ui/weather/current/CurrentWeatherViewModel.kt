@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.data.database.entity.CurrentWeatherEntry
+import com.example.weatherapp.data.database.entity.WeatherLocation
 import com.example.weatherapp.data.provider.UnitProvider
 import com.example.weatherapp.data.repository.ForecastRepository
 import kotlinx.coroutines.launch
@@ -15,11 +16,13 @@ class CurrentWeatherViewModel(
 
     val currentWeather: LiveData<CurrentWeatherEntry> = forecastRepository.currentWeather
 
+    val weatherLocation: LiveData<WeatherLocation> = forecastRepository.weatherLocation
+
     private val unitSystem = unitProvider.getUnitSystem()
 
     init {
         viewModelScope.launch {
-            forecastRepository.initWeatherData("La Chapelle sur Erdre", unitSystem.code)
+            forecastRepository.initWeatherData(unitSystem.code)
         }
     }
 }

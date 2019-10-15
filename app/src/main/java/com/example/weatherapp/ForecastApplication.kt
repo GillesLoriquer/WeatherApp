@@ -4,6 +4,8 @@ import android.app.Application
 import android.preference.PreferenceManager
 import com.example.weatherapp.data.database.ForecastDatabase
 import com.example.weatherapp.data.network.*
+import com.example.weatherapp.data.provider.LocationProvider
+import com.example.weatherapp.data.provider.LocationProviderImpl
 import com.example.weatherapp.data.provider.UnitProvider
 import com.example.weatherapp.data.provider.UnitProviderImpl
 import com.example.weatherapp.data.repository.ForecastRepository
@@ -26,8 +28,11 @@ class ForecastApplication : Application(), KodeinAware {
         // instance() est retourné par androidXModule et dans ce cas représente le contexte
         bind() from singleton { ForecastDatabase(instance()) }
 
-        // créer une dépendance du dao
+        // créer une dépendance de CurrentWeatherDao
         bind() from singleton { instance<ForecastDatabase>().currentWeatherDao() }
+
+        // créer une dépendance de WeatherLocationDao
+        bind() from singleton { instance<ForecastDatabase>().weatherLocationDao() }
 
         // créer une dépendence pour ConnectivityInterceptor
         // contrairement aux bindings ci-dessous, ConnectivityInterceptor possède une implémentation (on spécifie donc
@@ -42,9 +47,12 @@ class ForecastApplication : Application(), KodeinAware {
         // ici instance() fait référence à ApixuApiService déjà instancié
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
 
+        // créer une instance de LocationProvider
+        bind<LocationProvider>() with singleton { LocationProviderImpl() }
+
         // créer une dépendance de ForecastRepository
         // les deux instances font références aux paramètres nécessaire à l'instanciation de ForecastRepositoryImpl
-        bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance()) }
+        bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance(), instance(), instance()) }
 
         // créer une instance de UnitProvider
         bind<UnitProvider>() with singleton { UnitProviderImpl(instance()) }
