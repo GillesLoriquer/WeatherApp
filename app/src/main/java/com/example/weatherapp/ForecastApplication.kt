@@ -1,6 +1,7 @@
 package com.example.weatherapp
 
 import android.app.Application
+import android.preference.PreferenceManager
 import com.example.weatherapp.data.database.ForecastDatabase
 import com.example.weatherapp.data.network.*
 import com.example.weatherapp.data.provider.UnitProvider
@@ -57,5 +58,9 @@ class ForecastApplication : Application(), KodeinAware {
         super.onCreate()
         // Initialisation de la librairie ThreeTenAbp
         AndroidThreeTen.init(this)
+
+        // set les valeurs par défaut des SharedPreferences d'après les defaultValue définies dans preferences.xml
+        // ces valeurs sont paramétrées au premier lancement de l'application et ne sont pas réappliquées (readAgain à false)
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
     }
 }
