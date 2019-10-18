@@ -5,6 +5,9 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- COARSE_LOCATION = position provided by NETWORK_PROVIDER = less accurate -->
+    <!-- FINE_LOCATION = position provided by GPS_PROVIDER = more accurate -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".ForecastApplication"

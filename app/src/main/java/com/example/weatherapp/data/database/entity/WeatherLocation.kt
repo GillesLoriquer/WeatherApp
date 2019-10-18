@@ -14,8 +14,8 @@ data class WeatherLocation(
     val name: String,
     val country: String,
     val region: String,
-    val lat: String,
-    val lon: String,
+    val lat: Double,
+    val lon: Double,
     @Json(name = "timezone_id")
     val timezoneId: String,
     @Json(name = "localtime_epoch")

@@ -46,13 +46,11 @@ class CurrentWeatherFragment : Fragment(), KodeinAware {
         // current_weather_fragment.xml
         binding.viewModel = viewModel
 
-        // affiche "Aujourd'hui" dans le subtitle de l'action bar
-        updateDateToToday()
-
         // observe weatherLocation pour mettre à jour le nom de la location dans l'action bar
         viewModel.weatherLocation.observe(this@CurrentWeatherFragment, Observer { weatherLocation ->
             weatherLocation?.let {
                 updateLocation(it.name)
+                updateDateToToday()
             }
         })
 
